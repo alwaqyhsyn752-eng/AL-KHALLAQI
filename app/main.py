@@ -191,3 +191,7 @@ async def vault(secret: str, request: Request):
     if secret != "hg2026":
         return HTMLResponse("<h1>404</h1>", status_code=404)
     return _render("admin.html", request)
+
+@app.get("/apk", response_class=HTMLResponse)
+async def apk_page(request: Request):
+    return _render("apk.html", request)

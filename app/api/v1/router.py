@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.api.v1.endpoints import (
-    system, creative, studio, agent, chat, gallery, admin, apikeys,
+    system, creative, studio, agent, chat, gallery, admin, apikeys, apk,
 )
 
 api = APIRouter()
@@ -12,3 +12,4 @@ api.include_router(chat.router, prefix="/chat", tags=["chat"])
 api.include_router(gallery.router, prefix="/gallery", tags=["gallery"])
 api.include_router(admin.router, prefix="/admin", tags=["admin"])
 api.include_router(apikeys.router, prefix="/apikeys", tags=["apikeys"])
+api.include_router(apk.router, prefix="/apk", tags=["apk"])

@@ -1,0 +1,15 @@
+{
+  "appId": "com.hussein.alkhallaqi",
+  "appName": "AL-KHALLAQI",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://al-khallaqi.onrender.com",
+    "cleartext": false,
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#05030f"
+  }
+}

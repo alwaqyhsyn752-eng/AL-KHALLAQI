@@ -1,0 +1,15 @@
+{
+  "name": "al-khallaqi",
+  "version": "1.0.0",
+  "description": "AL-KHALLAQI Creative AI Agent",
+  "scripts": {
+    "build": "echo 'no build needed'"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

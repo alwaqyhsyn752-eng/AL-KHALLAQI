@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     GEMINI_API_KEY: str = ""
+    GEMINI_API_KEY_FALLBACK: str = ""
     GEMINI_MODEL: str = "gemini-3.8-flash"
     GROQ_API_KEY: str = ""
     OPENROUTER_API_KEY: str = ""
