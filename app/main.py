@@ -20,10 +20,37 @@ from app.services.agent.tools import (  # noqa: F401
 )
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-STATIC_DIR = BASE_DIR / "static"
+_HERE = Path(__file__).resolve()
+_CANDIDATES = [
+    _HERE.parent.parent,
+    _HERE.parent,
+    Path.cwd(),
+]
+
+def _find_dir(name: str) -> Path:
+    for base in _CANDIDATES:
+        d = base / name
+        if d.is_dir() and any(d.iterdir()) if d.exists() else False:
+            return d
+    for base in _CANDIDATES:
+        d = base / name
+        if d.is_dir():
+            return d
+    d = _HERE.parent.parent / name
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+TEMPLATES_DIR = _find_dir("templates")
+STATIC_DIR = _find_dir("static")
 STATIC_DIR.mkdir(exist_ok=True)
+
+# Debug: طباعة المسارات الفعلية
+import sys as _sys
+print(f"[AL-KHALLAQI] TEMPLATES_DIR = {TEMPLATES_DIR}", file=_sys.stderr)
+print(f"[AL-KHALLAQI] STATIC_DIR    = {STATIC_DIR}", file=_sys.stderr)
+print(f"[AL-KHALLAQI] exists: {TEMPLATES_DIR.exists()}", file=_sys.stderr)
+if TEMPLATES_DIR.exists():
+    print(f"[AL-KHALLAQI] files: {[p.name for p in TEMPLATES_DIR.iterdir()]}", file=_sys.stderr)
 
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
