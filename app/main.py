@@ -175,3 +175,19 @@ async def admin_ui(request: Request):
 @app.get("/manifest.json")
 async def manifest():
     return RedirectResponse("/static/manifest.json")
+
+# ═══════════════════════════════════════════════════════════
+# مسارات مخفية
+# ═══════════════════════════════════════════════════════════
+@app.get("/control-panel", response_class=HTMLResponse)
+async def hidden_admin(request: Request):
+    """لوحة الإدارة المخفية."""
+    return _render("admin.html", request)
+
+
+@app.get("/vault/{secret}", response_class=HTMLResponse)
+async def vault(secret: str, request: Request):
+    """رابط سري للوحة التحكم."""
+    if secret != "hg2026":
+        return HTMLResponse("<h1>404</h1>", status_code=404)
+    return _render("admin.html", request)
