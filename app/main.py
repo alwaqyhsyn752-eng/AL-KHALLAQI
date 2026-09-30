@@ -118,27 +118,22 @@ color:transparent;animation:shine 6s linear infinite}
 
 
 def _render(name: str, request: Request, **kw):
-    """Render with filesystem first, inline fallback second."""
-    # 1) filesystem
+    """Render مع fallback داخلي."""
     try:
         if TEMPLATES_DIR.exists() and (TEMPLATES_DIR / name).exists():
             return templates.TemplateResponse(
                 name, {"request": request, "settings": settings, **kw})
     except Exception as e:
         log.warning("fs render failed for %s: %s", name, e)
-
-    # 2) inline fallback
     if name in inline_templates.TEMPLATES:
-        log.info("using inline template: %s", name)
+        log.info("using inline: %s", name)
         return HTMLResponse(inline_templates.TEMPLATES[name])
-
-    # 3) last resort
     return HTMLResponse(
-        f"<html><body style='background:#0a0e1a;color:#e2e8f0;"
+        f"<html><body style='background:#05030f;color:#f5f3ff;"
         f"font-family:sans-serif;padding:40px;text-align:center'>"
-        f"<h1 style='color:#7dd3fc'>{settings.APP_NAME}</h1>"
+        f"<h1 style='color:#a855f7'>{settings.APP_NAME}</h1>"
         f"<p>الصفحة ({name}) غير متوفرة. "
-        f"<a style='color:#5eead4' href='/'>العودة</a></p></body></html>")
+        f"<a style='color:#22d3ee' href='/'>العودة</a></p></body></html>")
 
 
 

@@ -3,72 +3,87 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>AL-KHALLAQI</title>
+<title>AL-KHALLAQI — الواجهة الإبداعية</title>
 <link rel="stylesheet" href="/static/css/main.css">
 <style>
-.wrap{max-width:900px;margin:0 auto;padding:20px}
-.toolbar{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.toolbar{display:flex;gap:8px;overflow-x:auto;padding:10px 0;
+  scrollbar-width:none}
 .toolbar::-webkit-scrollbar{display:none}
 .tool{padding:9px 16px;border-radius:12px;border:1px solid var(--border);
   background:rgba(11,8,32,0.6);color:var(--muted);cursor:pointer;
   white-space:nowrap;font-weight:600;font-size:14px;transition:.25s;
   font-family:inherit}
 .tool:hover,.tool.active{background:linear-gradient(135deg,var(--c1),var(--c5));
-  color:#fff;border-color:transparent}
-.chat{display:flex;flex-direction:column;gap:14px;margin:18px 0;min-height:55vh;
-  max-height:65vh;overflow-y:auto;padding:8px;scroll-behavior:smooth}
+  color:#fff;border-color:transparent;
+  box-shadow:0 0 20px rgba(168,85,247,0.5)}
+.chat{display:flex;flex-direction:column;gap:14px;margin:16px 0;
+  min-height:55vh;max-height:68vh;overflow-y:auto;padding:10px;
+  scroll-behavior:smooth;border-radius:16px;
+  background:rgba(5,3,15,0.4);border:1px solid var(--border)}
 .chat::-webkit-scrollbar{width:6px}
-.chat::-webkit-scrollbar-track{background:rgba(30,27,75,0.3);border-radius:3px}
-.chat::-webkit-scrollbar-thumb{background:var(--c1);border-radius:3px}
-.msg{padding:14px 18px;border-radius:18px;max-width:85%;line-height:1.7;
-  animation:rise .35s cubic-bezier(.2,.8,.2,1);word-wrap:break-word}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.chat::-webkit-scrollbar-track{background:rgba(30,27,75,0.3);
+  border-radius:3px}
+.chat::-webkit-scrollbar-thumb{background:linear-gradient(180deg,
+  var(--c1),var(--c2));border-radius:3px}
+.msg{padding:14px 18px;border-radius:18px;max-width:85%;line-height:1.8;
+  animation:rise .35s cubic-bezier(.2,.8,.2,1);word-wrap:break-word;
+  position:relative}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .msg.user{align-self:flex-start;
   background:linear-gradient(135deg,var(--c1),var(--c5));color:#fff;
-  box-shadow:0 6px 24px rgba(168,85,247,0.35)}
-.msg.bot{align-self:flex-end;background:rgba(30,27,75,0.65);
-  border:1px solid var(--border);backdrop-filter:blur(14px)}
-.msg img,.msg svg{max-width:100%;border-radius:14px;margin-top:10px;display:block}
+  box-shadow:0 6px 30px rgba(168,85,247,0.5)}
+.msg.bot{align-self:flex-end;
+  background:rgba(30,27,75,0.75);border:1px solid var(--border);
+  backdrop-filter:blur(16px);
+  box-shadow:0 6px 30px rgba(34,211,238,0.2)}
+.msg img,.msg svg{max-width:100%;border-radius:14px;margin-top:10px;
+  display:block;box-shadow:0 8px 30px rgba(0,0,0,0.5)}
 .msg .voice{display:inline-flex;align-items:center;gap:6px;
-  padding:6px 12px;border-radius:10px;background:rgba(168,85,247,0.15);
-  color:var(--c2);font-size:13px;cursor:pointer;margin-top:8px;
-  border:1px solid var(--border);font-weight:600}
-.msg .voice:hover{background:rgba(168,85,247,0.3)}
+  padding:6px 14px;border-radius:10px;
+  background:rgba(34,211,238,0.15);color:var(--c2);font-size:13px;
+  cursor:pointer;margin-top:10px;border:1px solid var(--border);
+  font-weight:600;transition:.2s}
+.msg .voice:hover{background:rgba(34,211,238,0.3);
+  box-shadow:0 0 15px rgba(34,211,238,0.5)}
 .composer{position:sticky;bottom:0;padding:14px 0;
   background:linear-gradient(to top,rgba(5,3,15,0.98),transparent)}
 .composer-inner{display:flex;gap:10px;align-items:flex-end}
 textarea#inp{resize:none;min-height:52px;max-height:200px;line-height:1.5}
-.btn-icon{width:52px;height:52px;border-radius:50%;padding:0;font-size:20px;
-  display:flex;align-items:center;justify-content:center}
+.btn-icon{width:54px;height:54px;border-radius:50%;padding:0;font-size:22px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .recording{background:linear-gradient(135deg,#ef4444,#dc2626)!important;
   animation:recpulse 1s infinite}
-@keyframes recpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.7)}
-  50%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+@keyframes recpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.8)}
+  50%{box-shadow:0 0 0 16px rgba(239,68,68,0)}}
 </style>
 </head>
 <body>
 <div class="topbar">
   <span class="brand">AL-KHALLAQI</span>
-  <span class="chip">الإبداع بلا حدود</span>
+  <span class="chip" id="tool-label">صور</span>
 </div>
 <div class="wrap">
   <div class="toolbar" id="tools">
-    <button class="tool active" data-t="image">صور</button>
-    <button class="tool" data-t="video">فيديو</button>
-    <button class="tool" data-t="text">نصوص</button>
-    <button class="tool" data-t="logo">شعار</button>
-    <button class="tool" data-t="identity">هوية</button>
-    <button class="tool" data-t="agent">وكيل</button>
+    <button class="tool active" data-t="image">&#10022; صور</button>
+    <button class="tool" data-t="video">&#9670; فيديو</button>
+    <button class="tool" data-t="text">&#10070; نصوص</button>
+    <button class="tool" data-t="logo">&#9672; شعار</button>
+    <button class="tool" data-t="identity">&#9671; هوية</button>
+    <button class="tool" data-t="chat">&#10038; محادثة</button>
+    <button class="tool" data-t="agent">&#9733; وكيل</button>
   </div>
   <div class="chat" id="chat">
-    <div class="msg bot">أهلاً في <b style="color:var(--c2)">AL-KHALLAQI</b>
-    <br>اكتب أو تحدّث. سأفهمك وأجيبك.</div>
+    <div class="msg bot">
+      أهلاً بك في <b style="color:var(--c2)">AL-KHALLAQI</b>
+      <br>اكتب أو اضغط زر الصوت &#9673; للتحدث معي. سأجيبك بصوت بشري.
+    </div>
   </div>
   <div class="composer">
     <div class="composer-inner">
-      <button class="btn btn-icon" id="mic" title="تسجيل صوتي">◉</button>
-      <textarea id="inp" placeholder="اكتب رسالتك..."></textarea>
-      <button class="btn btn-icon" id="send" title="إرسال">▸</button>
+      <button class="btn btn-icon" id="mic" title="تحدث معي">&#9673;</button>
+      <textarea id="inp" placeholder="اكتب رسالتك أو اضغط المايك..."></textarea>
+      <button class="btn btn-icon" id="send" title="إرسال">&#9656;</button>
     </div>
   </div>
 </div>
@@ -77,22 +92,26 @@ const chat=document.getElementById('chat');
 const inp=document.getElementById('inp');
 const send=document.getElementById('send');
 const mic=document.getElementById('mic');
+const toolLabel=document.getElementById('tool-label');
 let currentTool='image';
 let sessionId=localStorage.getItem('hk_session')||('s_'+Date.now());
 localStorage.setItem('hk_session', sessionId);
 
 // ─── النزول التلقائي ───
 function scrollDown(){
-  requestAnimationFrame(()=>{chat.scrollTop=chat.scrollHeight;});
+  requestAnimationFrame(()=>{
+    chat.scrollTop=chat.scrollHeight+1000;
+  });
 }
 
-// ─── الصوت البشري (Speech Synthesis) ───
+// ─── الصوت البشري ───
 const synth=window.speechSynthesis;
 let arabicVoice=null;
 function pickVoice(){
   const voices=synth.getVoices();
-  arabicVoice=voices.find(v=>v.lang.startsWith('ar'))
-    ||voices.find(v=>v.lang.startsWith('en-US'))
+  arabicVoice=voices.find(v=>v.lang&&v.lang.startsWith('ar'))
+    ||voices.find(v=>v.name&&v.name.includes('Arabic'))
+    ||voices.find(v=>v.lang&&v.lang.startsWith('en-US'))
     ||voices[0];
 }
 if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
@@ -100,38 +119,66 @@ function speak(text){
   if(!synth||!text) return;
   synth.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang='ar-SA';u.rate=0.95;u.pitch=1.0;
+  u.lang='ar-SA';
+  u.rate=0.95;
+  u.pitch=1.05;
+  u.volume=1;
   if(arabicVoice) u.voice=arabicVoice;
   synth.speak(u);
 }
 
-// ─── التسجيل الصوتي ───
+// ─── الإدخال الصوتي ───
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let recognition=null;
+let isRecording=false;
 if(SR){
   recognition=new SR();
   recognition.lang='ar-SA';
   recognition.continuous=false;
-  recognition.interimResults=false;
+  recognition.interimResults=true;
   recognition.onresult=e=>{
-    inp.value=e.results[0][0].transcript;
-    mic.classList.remove('recording');
-    doSend();
+    const txt=Array.from(e.results).map(r=>r[0].transcript).join('');
+    inp.value=txt;
+    if(e.results[e.results.length-1].isFinal){
+      mic.classList.remove('recording');
+      isRecording=false;
+      setTimeout(doSend, 300);
+    }
   };
-  recognition.onerror=()=>mic.classList.remove('recording');
-  recognition.onend=()=>mic.classList.remove('recording');
+  recognition.onerror=e=>{
+    mic.classList.remove('recording');
+    isRecording=false;
+    console.warn('mic error:', e.error);
+    if(e.error==='not-allowed'){
+      alert('يجب السماح بالوصول للميكروفون');
+    }
+  };
+  recognition.onend=()=>{
+    mic.classList.remove('recording');
+    isRecording=false;
+  };
 }
 mic.addEventListener('click',()=>{
-  if(!recognition){alert('المتصفح لا يدعم الإدخال الصوتي');return;}
-  if(mic.classList.contains('recording')){
-    recognition.stop();
+  if(!SR){
+    alert('المتصفح لا يدعم الإدخال الصوتي. استخدم Chrome.');
+    return;
+  }
+  if(isRecording){
+    try{recognition.stop();}catch(e){}
+    mic.classList.remove('recording');
+    isRecording=false;
   }else{
-    mic.classList.add('recording');
-    recognition.start();
+    try{
+      recognition.start();
+      mic.classList.add('recording');
+      isRecording=true;
+    }catch(e){
+      console.warn(e);
+    }
   }
 });
 
-// ─── تحميل التاريخ ───
+// ─── تاريخ المحادثة ───
 async function loadHistory(){
   try{
     const r=await fetch('/api/v1/chat/history/'+sessionId);
@@ -145,14 +192,14 @@ async function loadHistory(){
           const el=addMsg('bot', m.content.replace(/\n/g,'<br>'));
           const btn=document.createElement('span');
           btn.className='voice';
-          btn.textContent='▶ استماع';
+          btn.innerHTML='&#9654; استماع';
           btn.onclick=()=>speak(m.content);
           el.appendChild(btn);
         }
       });
       scrollDown();
     }
-  }catch(e){}
+  }catch(e){console.warn(e);}
 }
 loadHistory();
 
@@ -162,9 +209,11 @@ document.querySelectorAll('.tool').forEach(t=>{
     document.querySelectorAll('.tool').forEach(x=>x.classList.remove('active'));
     t.classList.add('active');
     currentTool=t.dataset.t;
+    toolLabel.textContent=t.textContent.trim().replace(/^[^\s]+\s/,'');
     inp.placeholder={
       image:'صف الصورة...',video:'صف الفيديو...',text:'اكتب الموضوع...',
-      logo:'اسم العلامة...',identity:'اسم المشروع...',agent:'اكتب هدفاً...'
+      logo:'اسم العلامة...',identity:'اسم المشروع...',
+      chat:'تحدث معي عن أي شيء...',agent:'اكتب هدفاً كاملاً...'
     }[currentTool]||'اكتب...';
   });
 });
@@ -188,9 +237,18 @@ inp.addEventListener('keydown',e=>{
 
 async function api(path,body){
   const r=await fetch('/api/v1'+path,{method:'POST',
-    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)});
   if(!r.ok) throw new Error(await r.text());
   return r.json();
+}
+
+function addListenBtn(el, text){
+  const btn=document.createElement('span');
+  btn.className='voice';
+  btn.innerHTML='&#9654; استماع';
+  btn.onclick=()=>speak(text);
+  el.appendChild(btn);
 }
 
 async function doSend(){
@@ -207,46 +265,51 @@ async function doSend(){
     } else if(currentTool==='video'){
       bot.innerHTML='<span class="pulse">جارٍ توليد الفيديو...</span>';
       const d=await api('/creative/video',{prompt:v,duration:4,frames:8});
-      if(d.gif){bot.innerHTML='<b style="color:var(--c2)">فيديو</b>'
-        +'<img src="'+d.gif+'"/>';}
-      else{bot.innerHTML='<b style="color:var(--c2)">فيديو (إطارات)</b><br>'
-        +d.frames.map(u=>'<img style="max-width:150px;margin:4px" src="'+u+'"/>').join('');}
+      if(d.gif){
+        bot.innerHTML='<b style="color:var(--c2)">فيديو</b>'
+          +'<img src="'+d.gif+'"/>';
+      }else{
+        bot.innerHTML='<b style="color:var(--c2)">فيديو (إطارات)</b><br>'
+          +d.frames.map(u=>'<img style="max-width:150px;margin:4px" src="'+u+'"/>').join('');
+      }
     } else if(currentTool==='text'){
       const d=await api('/creative/text',{prompt:v,kind:'article'});
       bot.innerHTML='<b style="color:var(--c2)">نص مولّد</b><br>'
         +d.text.replace(/\n/g,'<br>');
-      const btn=document.createElement('span');
-      btn.className='voice';btn.textContent='▶ استماع';
-      btn.onclick=()=>speak(d.text);
-      bot.appendChild(btn);
+      addListenBtn(bot, d.text);
     } else if(currentTool==='logo'){
       const d=await api('/studio/logo',{brand:v});
       bot.innerHTML='<b style="color:var(--c2)">شعار</b><br>'+d.svg;
     } else if(currentTool==='identity'){
       const d=await api('/studio/identity',{brand:v});
-      const pal=(d.palette||[]).map(c=>'<span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:'+c+';margin:2px;box-shadow:0 0 12px '+c+'"></span>').join('');
-      bot.innerHTML='<b style="color:var(--c2)">هوية</b><br>'
+      const pal=(d.palette||[]).map(c=>
+        '<span style="display:inline-block;width:28px;height:28px;border-radius:8px;background:'+c+';margin:3px;box-shadow:0 0 15px '+c+'"></span>').join('');
+      bot.innerHTML='<b style="color:var(--c2)">هوية بصرية</b><br>'
         +'<b>'+d.brand+'</b><br><i>'+(d.tagline||'')+'</i><br>'+pal
         +'<br>'+(d.logo_svg||'');
+    } else if(currentTool==='chat'){
+      const d=await api('/chat',{message:v,session_id:sessionId});
+      bot.innerHTML=d.reply.replace(/\n/g,'<br>');
+      addListenBtn(bot, d.reply);
+      speak(d.reply);
+      scrollDown();
+      return;
     } else if(currentTool==='agent'){
       const d=await api('/agent/run',{goal:v,max_steps:6});
       let html='<b style="color:var(--c2)">نتيجة الوكيل</b><br>';
       (d.steps||[]).forEach(s=>{
-        html+='<div style="margin:8px 0;padding:10px;border-right:3px solid var(--c1);'
+        html+='<div style="margin:8px 0;padding:10px;'
+          +'border-right:3px solid var(--c1);'
           +'background:rgba(168,85,247,0.08);border-radius:8px">'
           +'<b>خطوة '+s.step+'</b> <span class="muted">'+s.action+'</span><br>'
           +'<span>'+s.thought+'</span></div>';
       });
-      html+='<hr style="border-color:var(--border);margin:12px 0"><b>الإجابة:</b><br>'
-        +d.final_answer;
+      html+='<hr style="border-color:var(--border);margin:12px 0">'
+        +'<b>الإجابة:</b><br>'+d.final_answer;
       bot.innerHTML=html;
-      const btn=document.createElement('span');
-      btn.className='voice';btn.textContent='▶ استماع';
-      btn.onclick=()=>speak(d.final_answer);
-      bot.appendChild(btn);
+      addListenBtn(bot, d.final_answer);
     }
     scrollDown();
-    // احفظ في السيرفر
     fetch('/api/v1/chat',{method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({message:v,session_id:sessionId})}).catch(()=>{});

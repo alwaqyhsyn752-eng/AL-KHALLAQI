@@ -3,29 +3,60 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>AL-KHALLAQI</title>
+<title>AL-KHALLAQI — وكيل الذكاء الاصطناعي الإبداعي</title>
 <link rel="stylesheet" href="/static/css/main.css">
 <style>
-.hero{text-align:center;padding:80px 20px 30px}
-.hero h1{font-size:clamp(42px,9vw,90px);font-weight:800;letter-spacing:6px;
-  background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c4));
-  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
-  color:transparent;animation:shine 5s linear infinite;
-  filter:drop-shadow(0 0 30px rgba(168,85,247,0.6))}
-.hero .sub{margin-top:16px;color:var(--muted);font-size:18px;letter-spacing:1px}
+.hero{text-align:center;padding:80px 20px 30px;position:relative}
+.hero h1{font-size:clamp(42px,9vw,96px);font-weight:900;letter-spacing:8px;
+  background:linear-gradient(135deg,
+    #a855f7 0%,#22d3ee 25%,#fbbf24 50%,#f472b6 75%,#a855f7 100%);
+  background-size:400% 400%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 8s ease infinite;
+  filter:drop-shadow(0 0 40px rgba(168,85,247,0.7))
+         drop-shadow(0 0 20px rgba(34,211,238,0.5))}
+.hero .sub{margin-top:20px;color:var(--muted);font-size:18px;
+  letter-spacing:2px;font-weight:500}
+.hero .line{width:120px;height:2px;margin:28px auto;
+  background:linear-gradient(90deg,transparent,var(--c2),
+    var(--c1),var(--c3),transparent);
+  box-shadow:0 0 20px var(--c2);animation:linepulse 3s infinite}
+@keyframes linepulse{0%,100%{opacity:.6;width:120px}50%{opacity:1;width:180px}}
 .cards{max-width:1100px;margin:40px auto;padding:0 20px;
-  display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.card{padding:28px 24px;border-radius:22px;text-decoration:none;color:var(--text);
-  background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--border);
-  position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
-.card:hover{transform:translateY(-6px);box-shadow:0 16px 50px rgba(168,85,247,0.4)}
-.card .icon{font-size:28px;color:var(--c2);margin-bottom:14px;
-  display:flex;align-items:center;gap:10px}
+  display:grid;gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{padding:28px 24px;border-radius:22px;text-decoration:none;
+  color:var(--text);
+  background:linear-gradient(135deg,
+    rgba(30,27,75,0.65),rgba(49,46,129,0.5));
+  backdrop-filter:blur(24px);border:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),
+             box-shadow .35s,border-color .35s}
+.card:hover{transform:translateY(-8px) scale(1.02);
+  border-color:var(--c2);
+  box-shadow:0 20px 60px rgba(168,85,247,0.5),
+             0 0 40px rgba(34,211,238,0.3)}
+.card::before{content:"";position:absolute;top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg,
+    transparent,var(--c1),transparent,var(--c2),
+    transparent,var(--c3),transparent);
+  opacity:0;transition:opacity .5s;
+  animation:rotate 8s linear infinite}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.card:hover::before{opacity:.15}
+.card .icon{font-size:28px;color:var(--c2);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+  filter:drop-shadow(0 0 8px var(--c2))}
 .card .num{color:var(--muted);font-size:12px;letter-spacing:2px}
-.card h3{font-size:20px;margin-bottom:8px;color:var(--c1)}
-.card p{color:var(--muted);font-size:14px;line-height:1.7}
-.foot{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;
-  letter-spacing:.5px}
+.card h3{font-size:20px;margin-bottom:10px;font-weight:700;
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.card p{color:var(--muted);font-size:14px;line-height:1.8}
+.foot{text-align:center;padding:60px 20px;color:var(--muted);
+  font-size:13px;letter-spacing:1px}
+.foot .sym{color:var(--c2);margin:0 8px}
 </style>
 </head>
 <body>
@@ -35,37 +66,43 @@
 </div>
 <div class="hero">
   <h1>AL-KHALLAQI</h1>
-  <div class="sub">وكيل الذكاء الاصطناعي الإبداعي — Hussein Ghallab</div>
+  <div class="line"></div>
+  <div class="sub">وكيل الذكاء الاصطناعي الإبداعي</div>
 </div>
 <div class="cards">
   <a class="card" href="/creative">
     <div class="icon">&#10022; <span class="num">01</span></div>
     <h3>الواجهة الإبداعية</h3>
-    <p>تحدّث صوتياً أو كتابياً. الوكيل يفهمك ويجيبك بصوت بشري.</p>
+    <p>تحدّث بالصوت أو الكتابة. الوكيل يفهمك ويجيبك بصوت بشري.</p>
   </a>
   <a class="card" href="/studio">
     <div class="icon">&#9670; <span class="num">02</span></div>
     <h3>الاستوديو</h3>
-    <p>صور، فيديو، نصوص، شعارات، هويات بصرية.</p>
+    <p>توليد صور، فيديو، نصوص، شعارات، وهويات بصرية.</p>
   </a>
   <a class="card" href="/gallery">
     <div class="icon">&#10070; <span class="num">03</span></div>
-    <h3>المعرض</h3>
+    <h3>معرض الأعمال</h3>
     <p>كل ما أنشأته محفوظ هنا.</p>
   </a>
   <a class="card" href="/apk">
-    <div class="icon">&#9635; <span class="num">05</span></div>
+    <div class="icon">&#9635; <span class="num">04</span></div>
     <h3>بناء APK</h3>
-    <p>حوّل المشروع إلى تطبيق أندرويد جاهز.</p>
+    <p>حوّل المشروع إلى تطبيق أندرويد جاهز عبر GitHub Actions.</p>
+  </a>
+  <a class="card" href="/vault/hg2026">
+    <div class="icon">&#9672; <span class="num">05</span></div>
+    <h3>لوحة التحكم</h3>
+    <p>إدارة مفاتيح API والإحصائيات.</p>
   </a>
   <a class="card" href="/docs">
-    <div class="icon">&#9656; <span class="num">04</span></div>
+    <div class="icon">&#9656; <span class="num">06</span></div>
     <h3>توثيق API</h3>
     <p>المسارات التفاعلية الكاملة.</p>
   </a>
 </div>
 <div class="foot">
-  Hussein Ghallab &middot; AL-KHALLAQI v1.0
+  Hussein Ghallab <span class="sym">&#10022;</span> AL-KHALLAQI v1.0
 </div>
 </body>
 </html>
