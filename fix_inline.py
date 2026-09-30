@@ -1,61 +1,24 @@
-"""AL-KHALLAQI — FastAPI entry."""
-from contextlib import asynccontextmanager
+#!/usr/bin/env python3
 from pathlib import Path
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+main = Path("app/main.py")
+s = main.read_text(encoding="utf-8")
 
-from app.api.v1.router import api
-from app.core.config import settings
-from app.core.exceptions import HKBaseError
-from app.core.logging import log, setup_logging
-from app.db.engine import dispose_engine, init_db
-from app.db.redis import close_cache
-from app.services.ai.router import get_ai
-from app.services.agent.tools import (  # noqa: F401
-    image_gen, image_edit, video_gen, text_gen,
-    logo_design, identity_design, search, apk_build,
-)
+# 1) استبدل دالة _render بنسخة فيها fallback HTML مدمج
+OLD_RENDER_START = "def _render(name: str, request: Request, **kw):"
+idx = s.find(OLD_RENDER_START)
+if idx == -1:
+    print("❌ لم أجد _render")
+    raise SystemExit(1)
 
+# ابحث عن نهاية الدالة (أول @app.get بعدها)
+end_marker = '@app.get("/", response_class=HTMLResponse)'
+end_idx = s.find(end_marker, idx)
+if end_idx == -1:
+    print("❌ لم أجد نهاية _render")
+    raise SystemExit(1)
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-STATIC_DIR = BASE_DIR / "static"
-STATIC_DIR.mkdir(exist_ok=True)
-
-templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    setup_logging("DEBUG" if settings.DEBUG else "INFO")
-    log.info("Starting %s v%s", settings.APP_NAME, settings.APP_VERSION)
-    await init_db()
-    log.info("AI providers: %s", get_ai().status())
-    yield
-    await close_cache()
-    await dispose_engine()
-    log.info("Shutdown complete")
-
-
-app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
-    description=f"{settings.APP_NAME_AR} — {settings.SLOGAN}",
-    lifespan=lifespan,
-)
-app.include_router(api, prefix="/api/v1")
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
-
-
-@app.exception_handler(HKBaseError)
-async def hk_err(request: Request, exc: HKBaseError):
-    return JSONResponse(status_code=exc.status_code, content={"error": exc.message})
-
-
-FALLBACK_HTML = """<!doctype html>
+NEW_RENDER = '''FALLBACK_HTML = """<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"/>
@@ -138,36 +101,8 @@ def _render(name: str, request: Request, **kw):
         f"<a style='color:#22d3ee' href='/'>العودة للرئيسية</a></p></body></html>")
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return _render("choice.html", request)
+'''
 
-
-@app.get("/creative", response_class=HTMLResponse)
-async def creative_ui(request: Request):
-    return _render("creative.html", request)
-
-
-@app.get("/studio", response_class=HTMLResponse)
-async def studio_ui(request: Request):
-    return _render("studio.html", request)
-
-
-@app.get("/gallery", response_class=HTMLResponse)
-async def gallery_ui(request: Request):
-    return _render("gallery.html", request)
-
-
-@app.get("/work/{wid}", response_class=HTMLResponse)
-async def work_view(wid: int, request: Request):
-    return _render("work_view.html", request, work_id=wid)
-
-
-@app.get("/admin", response_class=HTMLResponse)
-async def admin_ui(request: Request):
-    return _render("admin.html", request)
-
-
-@app.get("/manifest.json")
-async def manifest():
-    return RedirectResponse("/static/manifest.json")
+s = s[:idx] + NEW_RENDER + s[end_idx:]
+main.write_text(s, encoding="utf-8")
+print("✅ تم تحديث main.py بالقالب المدمج")
