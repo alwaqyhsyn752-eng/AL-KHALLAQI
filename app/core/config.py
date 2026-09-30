@@ -20,9 +20,13 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-3.8-flash"
     GROQ_API_KEY: str = ""
     OPENROUTER_API_KEY: str = ""
     DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_MODEL: str = "deepseek-flash"
+    DEEPSEEK_THINKING: str = "enabled"
+    DEEPSEEK_REASONING_EFFORT: str = "high"
 
     GITHUB_ACTIONS_TOKEN: str = ""
     TELEGRAM_BOT_TOKEN: str = ""

@@ -1,4 +1,4 @@
-"""AI Router: tries providers in order."""
+"""AI Router — ترتيب حسب الأولوية المجانية."""
 from typing import List, Optional
 from app.core.config import settings
 from app.core.exceptions import ProviderError
@@ -13,10 +13,14 @@ from app.services.ai.deepseek import DeepSeekProvider
 class AIRouter:
     def __init__(self) -> None:
         self.providers = [
-            GeminiProvider(settings.GEMINI_API_KEY),
             GroqProvider(settings.GROQ_API_KEY),
+            GeminiProvider(settings.GEMINI_API_KEY),
             OpenRouterProvider(settings.OPENROUTER_API_KEY),
-            DeepSeekProvider(settings.DEEPSEEK_API_KEY),
+            DeepSeekProvider(
+                settings.DEEPSEEK_API_KEY,
+                thinking=getattr(settings, "DEEPSEEK_THINKING", "enabled"),
+                reasoning_effort=getattr(settings, "DEEPSEEK_REASONING_EFFORT", "high"),
+            ),
         ]
 
     def status(self) -> dict:
