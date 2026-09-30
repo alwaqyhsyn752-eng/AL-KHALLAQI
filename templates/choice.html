@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>AL-KHALLAQI — وكيل الذكاء الاصطناعي الإبداعي</title>
+<title>AL-KHALLAQI</title>
 <link rel="stylesheet" href="/static/css/main.css">
 <style>
-.hero{text-align:center;padding:80px 20px 30px;position:relative}
+.hero{text-align:center;padding:80px 20px 30px}
 .hero h1{font-size:clamp(42px,9vw,96px);font-weight:900;letter-spacing:8px;
   background:linear-gradient(135deg,
     #a855f7 0%,#22d3ee 25%,#fbbf24 50%,#f472b6 75%,#a855f7 100%);
@@ -37,18 +37,9 @@
   border-color:var(--c2);
   box-shadow:0 20px 60px rgba(168,85,247,0.5),
              0 0 40px rgba(34,211,238,0.3)}
-.card::before{content:"";position:absolute;top:-50%;left:-50%;
-  width:200%;height:200%;
-  background:conic-gradient(from 0deg,
-    transparent,var(--c1),transparent,var(--c2),
-    transparent,var(--c3),transparent);
-  opacity:0;transition:opacity .5s;
-  animation:rotate 8s linear infinite}
-@keyframes rotate{to{transform:rotate(360deg)}}
-.card:hover::before{opacity:.15}
-.card .icon{font-size:28px;color:var(--c2);margin-bottom:16px;
+.card .icon{font-size:32px;color:var(--c2);margin-bottom:16px;
   display:flex;align-items:center;gap:10px;
-  filter:drop-shadow(0 0 8px var(--c2))}
+  filter:drop-shadow(0 0 12px var(--c2))}
 .card .num{color:var(--muted);font-size:12px;letter-spacing:2px}
 .card h3{font-size:20px;margin-bottom:10px;font-weight:700;
   background:linear-gradient(90deg,var(--c1),var(--c2));
@@ -71,38 +62,38 @@
 </div>
 <div class="cards">
   <a class="card" href="/creative">
-    <div class="icon">&#10022; <span class="num">01</span></div>
+    <div class="icon">&#x2B22; <span class="num">01</span></div>
     <h3>الواجهة الإبداعية</h3>
-    <p>تحدّث بالصوت أو الكتابة. الوكيل يفهمك ويجيبك بصوت بشري.</p>
+    <p>تحدّث بالصوت أو الكتابة. الوكيل يفهمك ويجيبك.</p>
   </a>
   <a class="card" href="/studio">
-    <div class="icon">&#9670; <span class="num">02</span></div>
+    <div class="icon">&#x27C1; <span class="num">02</span></div>
     <h3>الاستوديو</h3>
-    <p>توليد صور، فيديو، نصوص، شعارات، وهويات بصرية.</p>
+    <p>صور، فيديو، نصوص، شعارات، وهويات بصرية.</p>
   </a>
   <a class="card" href="/gallery">
-    <div class="icon">&#10070; <span class="num">03</span></div>
-    <h3>معرض الأعمال</h3>
+    <div class="icon">&#x25C8; <span class="num">03</span></div>
+    <h3>المعرض</h3>
     <p>كل ما أنشأته محفوظ هنا.</p>
   </a>
   <a class="card" href="/apk">
-    <div class="icon">&#9635; <span class="num">04</span></div>
+    <div class="icon">&#x27D0; <span class="num">04</span></div>
     <h3>بناء APK</h3>
-    <p>حوّل المشروع إلى تطبيق أندرويد جاهز عبر GitHub Actions.</p>
+    <p>حوّل المشروع إلى تطبيق أندرويد جاهز.</p>
   </a>
   <a class="card" href="/vault/hg2026">
-    <div class="icon">&#9672; <span class="num">05</span></div>
+    <div class="icon">&#x232C; <span class="num">05</span></div>
     <h3>لوحة التحكم</h3>
     <p>إدارة مفاتيح API والإحصائيات.</p>
   </a>
   <a class="card" href="/docs">
-    <div class="icon">&#9656; <span class="num">06</span></div>
+    <div class="icon">&#x27E1; <span class="num">06</span></div>
     <h3>توثيق API</h3>
     <p>المسارات التفاعلية الكاملة.</p>
   </a>
 </div>
 <div class="foot">
-  Hussein Ghallab <span class="sym">&#10022;</span> AL-KHALLAQI v1.0
+  Hussein Ghallab <span class="sym">&#x2B22;</span> AL-KHALLAQI v1.0
 </div>
 </body>
 </html>

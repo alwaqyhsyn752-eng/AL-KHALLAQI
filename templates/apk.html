@@ -1,23 +1,25 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"/>
+<head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>AL-KHALLAQI — APK</title>
 <link rel="stylesheet" href="/static/css/main.css">
 <style>
-.wrap{max-width:700px;margin:0 auto;padding:30px}
-.status{padding:20px;border-radius:16px;background:var(--card);
-  border:1px solid var(--border);margin-bottom:20px}
-.status .label{color:var(--muted);font-size:13px;letter-spacing:1px}
-.status .value{margin-top:8px;font-size:15px;color:var(--c2)}
-.url{word-break:break-all;padding:12px;border-radius:10px;
-  background:rgba(0,0,0,.3);margin-top:10px;font-size:13px;
-  font-family:monospace;color:var(--c2)}
+.wrap{max-width:700px;margin:0 auto;padding:26px}
+.section{padding:22px;border-radius:18px;background:var(--card);
+  border:1px solid var(--border);margin-bottom:18px}
+.section h3{color:var(--c1);margin-bottom:14px;letter-spacing:1px;
+  display:flex;align-items:center;gap:10px}
+.section h3 .sym{color:var(--c2);font-size:22px}
+.status{padding:16px;border-radius:14px;background:rgba(11,8,32,0.7);
+  border:1px solid var(--border);margin-top:14px}
+.status .label{color:var(--muted);font-size:12px;letter-spacing:1px}
+.status .value{margin-top:8px;font-size:15px;color:var(--c2);
+  word-break:break-all}
 .link{display:inline-block;padding:12px 24px;border-radius:12px;
   background:linear-gradient(135deg,var(--c1),var(--c5));
-  color:#fff;text-decoration:none;font-weight:700;margin:10px 5px;
-  box-shadow:0 6px 24px rgba(168,85,247,.4)}
+  color:#fff;text-decoration:none;font-weight:700;margin:8px 4px;
+  box-shadow:0 6px 24px rgba(168,85,247,0.4)}
 h2{color:var(--c1);margin-bottom:20px;letter-spacing:1px}
 </style>
 </head>
@@ -27,39 +29,38 @@ h2{color:var(--c1);margin-bottom:20px;letter-spacing:1px}
   <span class="chip">APK</span>
 </div>
 <div class="wrap">
-  <h2>بناء تطبيق APK</h2>
+  <h2><span style="color:var(--c2)">&#x27D0;</span> بناء تطبيق APK</h2>
 
-  <div class="status">
-    <div class="label">الإصدار</div>
-    <div class="value"><input class="input" id="ver" value="1.0.0" style="max-width:150px;display:inline-block"></div>
+  <div class="section">
+    <h3><span class="sym">&#x27D0;</span> الإصدار</h3>
+    <input class="input" id="ver" value="1.0.0" style="max-width:180px">
   </div>
 
-  <button class="btn" onclick="build()" style="width:100%;padding:16px;font-size:16px">
+  <button class="btn" onclick="build()"
+    style="width:100%;padding:16px;font-size:16px">
     ابدأ البناء
   </button>
 
   <div id="result" style="margin-top:20px"></div>
 
-  <div style="margin-top:30px">
-    <div class="status">
-      <div class="label">المرجع</div>
-      <div class="value">صفحة البناء على GitHub</div>
-      <a class="link" target="_blank"
-        href="https://github.com/alwaqyhsyn752-eng/AL-KHALLAQI/actions/workflows/build-apk.yml">
-        فتح Actions
-      </a>
-      <a class="link" target="_blank"
-        href="https://github.com/alwaqyhsyn752-eng/AL-KHALLAQI/releases">
-        تحميل Releases
-      </a>
-    </div>
+  <div class="section" style="margin-top:24px">
+    <h3><span class="sym">&#x2B22;</span> المراجع</h3>
+    <a class="link" target="_blank"
+      href="https://github.com/alwaqyhsyn752-eng/AL-KHALLAQI/actions/workflows/build-apk.yml">
+      GitHub Actions
+    </a>
+    <a class="link" target="_blank"
+      href="https://github.com/alwaqyhsyn752-eng/AL-KHALLAQI/releases">
+      الإصدارات
+    </a>
   </div>
 </div>
 <script>
 async function build(){
   const v=document.getElementById('ver').value||'1.0.0';
   const out=document.getElementById('result');
-  out.innerHTML='<div class="status"><div class="value pulse">جارٍ الإرسال...</div></div>';
+  out.innerHTML='<div class="status"><div class="value pulse">'
+    +'جارٍ الإرسال...</div></div>';
   try{
     const r=await fetch('/api/v1/apk/build',{method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -69,15 +70,17 @@ async function build(){
       out.innerHTML='<div class="status">'
         +'<div class="label">الحالة</div>'
         +'<div class="value">بدأ البناء</div>'
-        +'<div class="url">'+d.actions_url+'</div>'
+        +'<div class="value" style="margin-top:10px">'+d.actions_url+'</div>'
         +'<p style="margin-top:10px;color:var(--muted)">'+d.note+'</p>'
         +'</div>';
     }else{
       let html='<div class="status" style="border-color:#f87171">'
         +'<div class="label">خطأ</div>'
-        +'<div class="value" style="color:#f87171">'+(d.error||'فشل')+'</div>';
+        +'<div class="value" style="color:#f87171">'
+        +(d.error||'فشل')+'</div>';
       if(d.how_to_fix){
-        html+='<ul style="margin-top:10px;padding-inline-start:20px;color:var(--muted)">';
+        html+='<ul style="margin-top:10px;padding-inline-start:20px;'
+          +'color:var(--muted)">';
         d.how_to_fix.forEach(s=>html+='<li>'+s+'</li>');
         html+='</ul>';
       }
@@ -86,7 +89,8 @@ async function build(){
     }
   }catch(e){
     out.innerHTML='<div class="status" style="border-color:#f87171">'
-      +'<div class="value" style="color:#f87171">خطأ: '+e.message+'</div></div>';
+      +'<div class="value" style="color:#f87171">خطأ: '
+      +e.message+'</div></div>';
   }
 }
 </script>
