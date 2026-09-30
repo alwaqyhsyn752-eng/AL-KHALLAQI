@@ -1,4 +1,8 @@
-"""AI Router — يتخطى المزودين الفاشلين بسرعة + caching للأخطاء."""
+#!/usr/bin/env python3
+from pathlib import Path
+BASE = Path(__file__).resolve().parent
+
+ROUTER = r'''"""AI Router — يتخطى المزودين الفاشلين بسرعة + caching للأخطاء."""
 import time
 from typing import List, Optional, Dict
 from app.core.config import settings
@@ -86,3 +90,6 @@ def get_ai() -> AIRouter:
     if _router is None:
         _router = AIRouter()
     return _router
+'''
+(BASE / "app" / "services" / "ai" / "router.py").write_text(ROUTER, encoding="utf-8")
+print("[+] router.py محدّث — يتخطى الفاشلين بسرعة")
