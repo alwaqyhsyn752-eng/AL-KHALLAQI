@@ -1,4 +1,4 @@
-"""AI Router — ترتيب حسب الأولوية المجانية."""
+"""AI Router — Groq → Gemini → OpenRouter → DeepSeek."""
 from typing import List, Optional
 from app.core.config import settings
 from app.core.exceptions import ProviderError

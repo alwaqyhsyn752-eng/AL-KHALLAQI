@@ -1,4 +1,4 @@
-"""DeepSeek provider — V4.1-Flash (2026) + thinking mode + reasoning_content."""
+"""DeepSeek provider — V4.1-Flash (2026) + thinking mode."""
 from typing import List, Optional, Dict, Any
 import httpx
 
@@ -9,11 +9,12 @@ from app.services.ai.base import BaseProvider, ChatMessage
 
 BASE_URL = "https://api.deepseek.com"
 
+# ⚠️ deepseek-flash (V4.1) أولاً — لا تحذفه
 MODELS = [
-    "deepseek-flash",
-    "deepseek-v4-pro",
-    "deepseek-v4-flash",
-    "deepseek-v4-flash-vision-exp",
+    "deepseek-flash",                 # V4.1-Flash (الأحدث)
+    "deepseek-v4-pro",                # Pro
+    "deepseek-v4-flash",              # اسم قديم → يوجَّه تلقائياً
+    "deepseek-v4-flash-vision-exp",   # Vision
 ]
 
 
