@@ -1,0 +1,11 @@
+{
+  "name": "AL-KHALLAQI — وكيل الذكاء الاصطناعي الإبداعي",
+  "short_name": "AL-KHALLAQI",
+  "description": "الإبداع بلا حدود — Hussein Ghallab",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05030f",
+  "theme_color": "#a855f7",
+  "orientation": "portrait",
+  "icons": []
+}

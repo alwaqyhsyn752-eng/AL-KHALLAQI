@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AL-KHALLAQI — عرض العمل</title>
+<link rel="stylesheet" href="/static/css/main.css">
+<style>
+.wrap{max-width:900px;margin:0 auto;padding:24px;}
+.body{padding:24px;border-radius:20px;background:var(--glass);border:1px solid var(--border);}
+.body img,.body svg{max-width:100%;border-radius:14px;display:block;margin:12px 0;}
+.actions{display:flex;gap:10px;margin-top:20px;}
+</style></head>
+<body>
+<div class="topbar"><span class="brand">AL-KHALLAQI</span><span class="chip">عرض عمل</span></div>
+<div class="wrap">
+  <div class="body" id="body">⏳ جارٍ التحميل...</div>
+  <div class="actions" id="actions"></div>
+</div>
+<script>
+const wid=location.pathname.split('/').pop();
+(async()=>{
+  const r=await fetch('/api/v1/gallery/works/'+wid);
+  if(!r.ok){document.getElementById('body').textContent='غير موجود';return;}
+  const w=await r.json();
+  const b=document.getElementById('body');
+  let html='<h2>'+w.title+'</h2>'
+    +'<div class="chip" style="margin:8px 0">'+w.kind+'</div>';
+  if(w.prompt) html+='<p class="muted">'+w.prompt+'</p>';
+  if(w.content) html+='<div>'+w.content+'</div>';
+  const ex=w.extra||{};
+  if(ex.url) html+='<img src="'+ex.url+'"/>';
+  if(ex.svg) html+=ex.svg;
+  if(ex.text) html+='<div>'+ex.text.replace(/\n/g,'<br>')+'</div>';
+  b.innerHTML=html;
+  document.getElementById('actions').innerHTML=
+    '<button class="btn" onclick="history.back()">↩ رجوع</button>';
+})();
+</script>
+</body></html>

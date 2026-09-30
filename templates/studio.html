@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AL-KHALLAQI — استوديو الإبداع</title>
+<link rel="stylesheet" href="/static/css/main.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:20px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.tab{padding:10px 18px;border-radius:12px;border:1px solid var(--border);
+     background:rgba(11,8,32,0.5);color:var(--muted);cursor:pointer;font-weight:600;}
+.tab.active{background:linear-gradient(135deg,var(--p3),var(--c3));color:#fff;border-color:transparent;}
+.panel{display:none;padding:24px;}
+.panel.active{display:block;}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin-bottom:12px;}
+.row.full{grid-template-columns:1fr;}
+.preview{margin-top:20px;min-height:200px;padding:16px;border-radius:16px;
+         background:rgba(11,8,32,0.5);border:1px dashed var(--border);}
+.preview img,.preview svg{max-width:100%;border-radius:12px;}
+</style>
+</head>
+<body>
+<div class="topbar"><span class="brand">AL-KHALLAQI</span><span class="chip">الاستوديو</span></div>
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab active" data-p="images">🖼️ صور</div>
+    <div class="tab" data-p="video">🎬 فيديو</div>
+    <div class="tab" data-p="text">✍️ نصوص</div>
+    <div class="tab" data-p="identity">🌈 هويات</div>
+  </div>
+
+  <div class="glass panel active" id="images">
+    <h3>توليد صورة</h3><br>
+    <div class="row full"><textarea class="input" id="imgPrompt" rows="3" placeholder="صف الصورة..."></textarea></div>
+    <div class="row">
+      <select class="input" id="imgStyle">
+        <option value="realistic">واقعي</option>
+        <option value="artistic">فني</option>
+        <option value="cyberpunk">سايبربانك</option>
+        <option value="anime">أنمي</option>
+      </select>
+      <select class="input" id="imgSize">
+        <option value="1024x1024">1024 × 1024</option>
+        <option value="768x768">768 × 768</option>
+        <option value="1344x768">1344 × 768</option>
+        <option value="768x1344">768 × 1344</option>
+      </select>
+    </div>
+    <button class="btn" onclick="genImage()">✨ توليد</button>
+    <div class="preview" id="imgPrev">النتيجة ستظهر هنا...</div>
+  </div>
+
+  <div class="glass panel" id="video">
+    <h3>توليد فيديو</h3><br>
+    <div class="row full"><textarea class="input" id="vidPrompt" rows="3" placeholder="صف الفيديو..."></textarea></div>
+    <div class="row">
+      <select class="input" id="vidAspect">
+        <option value="16:9">16:9</option><option value="9:16">9:16</option><option value="1:1">1:1</option>
+      </select>
+      <input class="input" id="vidDur" type="number" value="4" min="2" max="10" placeholder="مدة بالثواني">
+    </div>
+    <button class="btn" onclick="genVideo()">🎬 توليد</button>
+    <div class="preview" id="vidPrev">النتيجة ستظهر هنا...</div>
+  </div>
+
+  <div class="glass panel" id="text">
+    <h3>توليد نص</h3><br>
+    <div class="row full"><textarea class="input" id="txtPrompt" rows="3" placeholder="الموضوع..."></textarea></div>
+    <div class="row">
+      <select class="input" id="txtKind">
+        <option value="article">مقال</option>
+        <option value="story">قصة</option>
+        <option value="script">سيناريو</option>
+      </select>
+      <select class="input" id="txtTone">
+        <option value="creative">إبداعي</option>
+        <option value="formal">رسمي</option>
+        <option value="fun">مرح</option>
+      </select>
+    </div>
+    <button class="btn" onclick="genText()">✍️ توليد</button>
+    <div class="preview" id="txtPrev">النتيجة ستظهر هنا...</div>
+  </div>
+
+  <div class="glass panel" id="identity">
+    <h3>بناء هوية بصرية</h3><br>
+    <div class="row">
+      <input class="input" id="idBrand" placeholder="اسم العلامة التجارية">
+      <input class="input" id="idIndustry" placeholder="المجال (اختياري)">
+    </div>
+    <button class="btn" onclick="genIdentity()">🌈 بناء</button>
+    <div class="preview" id="idPrev">النتيجة ستظهر هنا...</div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.p).classList.add('active');
+  });
+});
+async function post(path,body){
+  const r=await fetch('/api/v1'+path,{method:'POST',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function genImage(){
+  const p=document.getElementById('imgPrompt').value.trim(); if(!p) return;
+  const s=document.getElementById('imgStyle').value;
+  const [w,h]=document.getElementById('imgSize').value.split('x').map(Number);
+  const prev=document.getElementById('imgPrev');
+  prev.textContent='⏳ جارٍ التوليد...';
+  try{
+    const d=await post('/creative/image',{prompt:p,style:s,width:w,height:h});
+    prev.innerHTML='<img src="'+d.url+'"/>';
+  }catch(e){prev.textContent='خطأ: '+e.message;}
+}
+async function genVideo(){
+  const p=document.getElementById('vidPrompt').value.trim(); if(!p) return;
+  const prev=document.getElementById('vidPrev');
+  prev.textContent='⏳ جارٍ التوليد... (قد يستغرق دقيقة)';
+  try{
+    const d=await post('/creative/video',{
+      prompt:p,aspect:document.getElementById('vidAspect').value,
+      duration:Number(document.getElementById('vidDur').value)||4});
+    if(d.gif){prev.innerHTML='<img src="'+d.gif+'"/>';}
+    else{prev.innerHTML=d.frames.map(u=>'<img style="max-width:180px;margin:4px" src="'+u+'"/>').join('');}
+  }catch(e){prev.textContent='خطأ: '+e.message;}
+}
+async function genText(){
+  const p=document.getElementById('txtPrompt').value.trim(); if(!p) return;
+  const prev=document.getElementById('txtPrev');
+  prev.textContent='⏳ جارٍ الكتابة...';
+  try{
+    const d=await post('/creative/text',{prompt:p,
+      kind:document.getElementById('txtKind').value,
+      tone:document.getElementById('txtTone').value});
+    prev.innerHTML=d.text.replace(/\n/g,'<br>');
+  }catch(e){prev.textContent='خطأ: '+e.message;}
+}
+async function genIdentity(){
+  const b=document.getElementById('idBrand').value.trim(); if(!b) return;
+  const prev=document.getElementById('idPrev');
+  prev.textContent='⏳ جارٍ البناء...';
+  try{
+    const d=await post('/studio/identity',{brand:b,
+      industry:document.getElementById('idIndustry').value});
+    const pal=(d.palette||[]).map(c=>'<span style="display:inline-block;width:32px;height:32px;border-radius:8px;background:'+c+';margin:3px;"></span>').join('');
+    prev.innerHTML='<b>'+d.brand+'</b><br><i>'+(d.tagline||'')+'</i><br>'
+      +'<div style="margin:10px 0">'+pal+'</div>'+(d.logo_svg||'');
+  }catch(e){prev.textContent='خطأ: '+e.message;}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AL-KHALLAQI — الخلاقي</title>
+<link rel="manifest" href="/static/manifest.json">
+<link rel="stylesheet" href="/static/css/main.css">
+<style>
+.splash{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:100;transition:opacity .8s;}
+.splash.hide{opacity:0;pointer-events:none;}
+#crystal{position:fixed;inset:0;z-index:101;pointer-events:none;}
+.hero{position:relative;z-index:2;text-align:center;padding:80px 20px 40px;}
+.hero h1{
+  font-size:clamp(38px,8vw,90px); font-weight:900; letter-spacing:4px;
+  background:linear-gradient(90deg,var(--p1),var(--c1),var(--g1),var(--r1));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+  color:transparent;animation:shine 5s linear infinite;
+  filter:drop-shadow(0 0 24px rgba(168,85,247,0.6));
+}
+.hero p{margin-top:14px;color:var(--muted);font-size:18px;}
+.cards{max-width:1100px;margin:40px auto;padding:0 20px;display:grid;gap:20px;
+       grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+.card{padding:26px;border-radius:22px;text-decoration:none;color:var(--text);
+      background:var(--glass);backdrop-filter:blur(18px);
+      border:1px solid var(--border);position:relative;overflow:hidden;
+      transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 50px rgba(168,85,247,0.35);}
+.card::before{
+  content:"";position:absolute;inset:-2px;border-radius:22px;
+  background:conic-gradient(from 0deg,var(--p1),var(--c1),var(--g1),var(--r1),var(--p1));
+  opacity:0;transition:opacity .4s;z-index:-1;filter:blur(14px);
+}
+.card:hover::before{opacity:.6;}
+.card .icon{font-size:34px;margin-bottom:12px;}
+.card h3{font-size:20px;margin-bottom:6px;}
+.card p{color:var(--muted);font-size:14px;line-height:1.6;}
+.foot{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+<div class="splash" id="splash"><canvas id="crystal"></canvas></div>
+<div class="topbar">
+  <span class="brand">AL-KHALLAQI</span>
+  <span class="chip">الإبداع بلا حدود</span>
+</div>
+<div class="hero">
+  <h1>AL-KHALLAQI</h1>
+  <p>وكيل الذكاء الاصطناعي الإبداعي — طوّره Hussein Ghallab</p>
+</div>
+<div class="cards">
+  <a class="card" href="/creative"><div class="icon">✨</div><h3>الواجهة الإبداعية</h3><p>تحدّث مع الوكيل الذكي واطلب أفكاراً إبداعية.</p></a>
+  <a class="card" href="/studio"><div class="icon">🎨</div><h3>استوديو الإبداع</h3><p>صور، فيديو، نصوص، شعارات، هويات بصرية.</p></a>
+  <a class="card" href="/gallery"><div class="icon">🖼️</div><h3>معرض الأعمال</h3><p>تصفّح كل ما أنشأته واحفظه وشاركه.</p></a>
+  <a class="card" href="/admin"><div class="icon">⚙️</div><h3>لوحة الإدارة</h3><p>إحصائيات ومزودو الذكاء الاصطناعي.</p></a>
+  <a class="card" href="/docs"><div class="icon">📚</div><h3>توثيق API</h3><p>كل المسارات المتاحة مع أمثلة تفاعلية.</p></a>
+  <a class="card" href="/api/v1/health"><div class="icon">💚</div><h3>الحالة</h3><p>تحقق من صحة النظام والمزودين.</p></a>
+</div>
+<div class="foot">© 2026 Hussein Ghallab — AL-KHALLAQI v1.0</div>
+
+<script>
+(function(){
+  const splash=document.getElementById('splash');
+  const cv=document.getElementById('crystal');
+  const ctx=cv.getContext('2d');
+  let W,H;
+  function fit(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+  fit();addEventListener('resize',fit);
+  const COLORS=['#a855f7','#22d3ee','#fbbf24','#f472b6','#c084fc','#67e8f9'];
+  const N=140;
+  const parts=[];
+  for(let i=0;i<N;i++){
+    parts.push({
+      x:Math.random()*W, y:-Math.random()*H,
+      vy:0.6+Math.random()*1.8, vx:(Math.random()-0.5)*0.6,
+      r:1+Math.random()*2.4, c:COLORS[(Math.random()*COLORS.length)|0],
+      a:0.4+Math.random()*0.6
+    });
+  }
+  let t=0;
+  function loop(){
+    t++;
+    ctx.fillStyle='rgba(0,0,0,0.18)';
+    ctx.fillRect(0,0,W,H);
+    for(const p of parts){
+      p.y+=p.vy; p.x+=p.vx;
+      if(p.y>H+10){p.y=-10;p.x=Math.random()*W;}
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.c;
+      ctx.globalAlpha=p.a;
+      ctx.shadowBlur=14; ctx.shadowColor=p.c;
+      ctx.fill();
+      ctx.globalAlpha=1; ctx.shadowBlur=0;
+    }
+    if(t<220){requestAnimationFrame(loop);}
+    else{setTimeout(()=>splash.classList.add('hide'),200);}
+  }
+  loop();
+})();
+</script>
+</body>
+</html>

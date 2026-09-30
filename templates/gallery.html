@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AL-KHALLAQI — المعرض</title>
+<link rel="stylesheet" href="/static/css/main.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:20px;}
+.cardwork{padding:14px;border-radius:18px;background:var(--glass);
+          border:1px solid var(--border);transition:.3s;cursor:pointer;}
+.cardwork:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(168,85,247,0.3);}
+.cardwork .kind{font-size:11px;color:var(--muted);text-transform:uppercase;}
+.cardwork h4{margin:8px 0 4px;}
+.empty{padding:60px 20px;text-align:center;color:var(--muted);}
+</style></head>
+<body>
+<div class="topbar"><span class="brand">AL-KHALLAQI</span><span class="chip">المعرض</span></div>
+<div class="wrap">
+  <h2 style="margin-bottom:16px;">🖼️ معرض الأعمال</h2>
+  <div class="grid g2" id="grid"></div>
+  <div class="empty" id="empty" style="display:none;">لا توجد أعمال بعد. ابدأ من <a href="/studio" style="color:var(--c1)">الاستوديو</a>.</div>
+</div>
+<script>
+(async()=>{
+  const r=await fetch('/api/v1/gallery/works?limit=100');
+  const d=await r.json();
+  const grid=document.getElementById('grid');
+  if(!d.works||!d.works.length){document.getElementById('empty').style.display='block';return;}
+  d.works.forEach(w=>{
+    const a=document.createElement('a');
+    a.href='/work/'+w.id;
+    a.style.textDecoration='none'; a.style.color='inherit';
+    a.className='cardwork';
+    a.innerHTML='<div class="kind">'+w.kind+'</div>'
+      +'<h4>'+w.title+'</h4>'
+      +'<div class="muted" style="font-size:12px">'+(w.created_at||'').split('T')[0]+'</div>';
+    grid.appendChild(a);
+  });
+})();
+</script>
+</body></html>
