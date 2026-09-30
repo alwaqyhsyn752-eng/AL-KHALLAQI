@@ -1,5 +1,8 @@
 name: Build AL-KHALLAQI APK
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -78,6 +81,7 @@ jobs:
 
       - name: Create Release
         if: github.event_name == 'workflow_dispatch'
+        continue-on-error: true
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.event.inputs.version }}
