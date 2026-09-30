@@ -1,4 +1,4 @@
-"""Gemini — مجاني مع مفتاح احتياطي + نماذج متعددة."""
+"""Gemini — النماذج المجانية المؤكدة فقط."""
 from typing import List, Optional
 import httpx
 from app.core.config import settings
@@ -7,14 +7,13 @@ from app.core.logging import log
 from app.services.ai.base import BaseProvider, ChatMessage
 
 
-# أحدث النماذج المجانية (من Google AI Studio)
+# ✅ هذه النماذج متاحة ومجانية (تم اختبارها)
 TEXT_MODELS = [
-    "gemini-2.5-flash",              # مجاني، سريع
-    "gemini-2.5-pro",                # مجاني بحصة أعلى
-    "gemini-2.0-flash",              # مجاني مستقر
-    "gemini-2.0-flash-exp",          # تجريبي
-    "gemini-1.5-flash-latest",       # احتياطي
-    "gemini-1.5-pro-latest",         # احتياطي
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
+    "gemini-flash-latest",
 ]
 
 BASE_V1BETA = "https://generativelanguage.googleapis.com/v1beta"
@@ -26,7 +25,6 @@ class GeminiProvider(BaseProvider):
 
     @property
     def keys(self) -> list:
-        """قائمة المفاتيح — يدعم مفتاحين للتبديل عند نفاد الحصة."""
         keys = []
         k1 = getattr(settings, "GEMINI_API_KEY", "")
         k2 = getattr(settings, "GEMINI_API_KEY_FALLBACK", "")
@@ -60,12 +58,11 @@ class GeminiProvider(BaseProvider):
         candidates = [model] if model else TEXT_MODELS
         last_err = None
 
-        # جرّب كل مفتاح × كل نموذج
         for key in self.keys:
             for mdl in candidates:
                 url = f"{BASE_V1BETA}/models/{mdl}:generateContent"
                 try:
-                    async with httpx.AsyncClient(timeout=90.0) as c:
+                    async with httpx.AsyncClient(timeout=60.0) as c:
                         r = await c.post(
                             url, json=body,
                             headers={"x-goog-api-key": key,
@@ -73,7 +70,7 @@ class GeminiProvider(BaseProvider):
                         )
                     if r.status_code == 429:
                         last_err = f"{mdl}: 429 (quota)"
-                        continue  # جرّب المفتاح/النموذج التالي
+                        continue
                     if r.status_code == 404:
                         last_err = f"{mdl}: 404"
                         continue
@@ -81,7 +78,7 @@ class GeminiProvider(BaseProvider):
                         last_err = f"{mdl}: {r.status_code}"
                         continue
                     data = r.json()
-                    log.info("gemini OK: %s (key %s...)", mdl, key[:6])
+                    log.info("gemini OK: %s", mdl)
                     return data["candidates"][0]["content"]["parts"][0]["text"]
                 except Exception as e:
                     last_err = f"{mdl}: {e}"

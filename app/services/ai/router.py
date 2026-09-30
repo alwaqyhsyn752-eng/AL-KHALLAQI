@@ -1,4 +1,4 @@
-"""AI Router — Groq → Gemini → OpenRouter → DeepSeek."""
+"""AI Router — الأولوية للمزودين المجانيين."""
 from typing import List, Optional
 from app.core.config import settings
 from app.core.exceptions import ProviderError
@@ -37,14 +37,15 @@ class AIRouter:
             if not p.available:
                 continue
             try:
-                log.info("AI router trying %s", p.name)
+                log.info("router trying %s", p.name)
                 return await p.chat(messages, system=system,
                                     temperature=temperature,
                                     max_tokens=max_tokens)
             except Exception as e:
                 errors.append(f"{p.name}: {e}")
+                log.warning("provider %s failed: %s", p.name, e)
                 continue
-        raise ProviderError("All providers failed: " + " | ".join(errors))
+        raise ProviderError(" | ".join(errors))
 
 
 _router: Optional[AIRouter] = None
