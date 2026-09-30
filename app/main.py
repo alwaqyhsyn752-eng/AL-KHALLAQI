@@ -13,6 +13,7 @@ from app.core.exceptions import HKBaseError
 from app.core.logging import log, setup_logging
 from app.db.engine import dispose_engine, init_db
 from app.db.redis import close_cache
+from app import inline_templates
 from app.services.ai.router import get_ai
 from app.services.agent.tools import (  # noqa: F401
     image_gen, image_edit, video_gen, text_gen,
@@ -117,25 +118,28 @@ color:transparent;animation:shine 6s linear infinite}
 
 
 def _render(name: str, request: Request, **kw):
-    # 1) جرّب Jinja2 أولاً
+    """Render with filesystem first, inline fallback second."""
+    # 1) filesystem
     try:
         if TEMPLATES_DIR.exists() and (TEMPLATES_DIR / name).exists():
             return templates.TemplateResponse(
                 name, {"request": request, "settings": settings, **kw})
     except Exception as e:
-        log.warning("jinja render failed for %s: %s", name, e)
+        log.warning("fs render failed for %s: %s", name, e)
 
-    # 2) fallback: قالب مدمج (يعمل دائماً)
-    if name == "choice.html":
-        return HTMLResponse(FALLBACK_HTML)
+    # 2) inline fallback
+    if name in inline_templates.TEMPLATES:
+        log.info("using inline template: %s", name)
+        return HTMLResponse(inline_templates.TEMPLATES[name])
 
-    # 3) أي قالب آخر: رد مبسط
+    # 3) last resort
     return HTMLResponse(
-        f"<html><body style='background:#05030f;color:#f5f3ff;"
+        f"<html><body style='background:#0a0e1a;color:#e2e8f0;"
         f"font-family:sans-serif;padding:40px;text-align:center'>"
-        f"<h1>{settings.APP_NAME}</h1><p>هذه الصفحة ({name}) "
-        f"تحتاج إلى قوالب. عرض الحالة: "
-        f"<a style='color:#22d3ee' href='/'>العودة للرئيسية</a></p></body></html>")
+        f"<h1 style='color:#7dd3fc'>{settings.APP_NAME}</h1>"
+        f"<p>الصفحة ({name}) غير متوفرة. "
+        f"<a style='color:#5eead4' href='/'>العودة</a></p></body></html>")
+
 
 
 @app.get("/", response_class=HTMLResponse)

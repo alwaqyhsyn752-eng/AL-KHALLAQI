@@ -2,22 +2,111 @@
 <html lang="ar" dir="rtl">
 <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>AL-KHALLAQI — المعرض</title>
-<link rel="stylesheet" href="/static/css/main.css">
-<style>
-.wrap{max-width:1100px;margin:0 auto;padding:20px;}
-.cardwork{padding:14px;border-radius:18px;background:var(--glass);
-          border:1px solid var(--border);transition:.3s;cursor:pointer;}
-.cardwork:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(168,85,247,0.3);}
-.cardwork .kind{font-size:11px;color:var(--muted);text-transform:uppercase;}
-.cardwork h4{margin:8px 0 4px;}
-.empty{padding:60px 20px;text-align:center;color:var(--muted);}
+<style>*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e1a;--bg2:#131a2c;
+  --card:rgba(20,30,50,0.65);
+  --border:rgba(125,211,252,0.22);
+  --primary:#7dd3fc;--primary2:#38bdf8;
+  --teal:#5eead4;--gold:#fcd34d;
+  --rose:#fda4af;--lavender:#a5b4fc;
+  --text:#e2e8f0;--muted:#94a3b8;
+}
+html,body{height:100%}
+body{
+  font-family:'Poppins','Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);overflow-x:hidden;
+  min-height:100vh;position:relative;line-height:1.6;
+}
+body::before{
+  content:"";position:fixed;inset:-20%;z-index:-2;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(125,211,252,0.18),transparent 45%),
+    radial-gradient(circle at 85% 30%,rgba(94,234,212,0.14),transparent 45%),
+    radial-gradient(circle at 50% 85%,rgba(165,180,252,0.15),transparent 50%);
+  filter:blur(70px);animation:aurora 22s ease-in-out infinite alternate;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(rgba(125,211,252,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(125,211,252,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(circle at center,black,transparent 85%);
+}
+@keyframes aurora{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(2%,-1.5%) scale(1.06)}
+  100%{transform:translate(-1.5%,1.5%) scale(1.02)}
+}
+.glass{
+  background:var(--card);
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  border:1px solid var(--border);border-radius:20px;
+  box-shadow:0 8px 40px rgba(10,14,26,0.5),inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:14px;border:1px solid var(--border);
+  background:linear-gradient(135deg,var(--primary2),var(--teal));
+  color:#0a0e1a;font-weight:700;cursor:pointer;font-family:inherit;font-size:15px;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s;
+  box-shadow:0 4px 22px rgba(56,189,248,0.3);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(56,189,248,0.5)}
+.input,textarea,select{
+  width:100%;padding:12px 14px;border-radius:12px;
+  background:rgba(10,14,26,0.7);border:1px solid var(--border);
+  color:var(--text);font-family:inherit;font-size:15px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.input:focus,textarea:focus,select:focus{
+  border-color:var(--primary);box-shadow:0 0 0 3px rgba(125,211,252,0.15);
+}
+.topbar{
+  position:sticky;top:0;z-index:20;padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,14,26,0.75);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.brand{
+  font-weight:800;font-size:20px;letter-spacing:2px;
+  color:var(--primary);
+}
+.brand .sym{color:var(--teal);margin:0 6px}
+.muted{color:var(--muted)}
+.chip{
+  display:inline-block;padding:5px 12px;border-radius:999px;
+  background:rgba(125,211,252,0.1);border:1px solid var(--border);
+  color:var(--muted);font-size:12px;letter-spacing:.5px;
+}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.sym{color:var(--teal)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:22px}
+.cardwork{padding:16px;border-radius:18px;background:var(--card);
+  border:1px solid var(--border);transition:.3s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.cardwork:hover{transform:translateY(-4px);border-color:var(--primary);
+  box-shadow:0 14px 40px rgba(56,189,248,0.18)}
+.cardwork .kind{font-size:11px;color:var(--teal);letter-spacing:2px;text-transform:uppercase}
+.cardwork h4{margin:10px 0 6px;color:var(--primary);font-weight:700}
+.empty{padding:80px 20px;text-align:center;color:var(--muted)}
+.empty .sym{color:var(--teal);font-size:32px;display:block;margin-bottom:14px}
 </style></head>
 <body>
-<div class="topbar"><span class="brand">AL-KHALLAQI</span><span class="chip">المعرض</span></div>
+<div class="topbar"><span class="brand">AL<span class="sym">✦</span>KHALLAQI</span>
+<span class="chip">المعرض</span></div>
 <div class="wrap">
-  <h2 style="margin-bottom:16px;">🖼️ معرض الأعمال</h2>
+  <h2 style="color:var(--primary);margin-bottom:20px;letter-spacing:1px">❖ معرض الأعمال</h2>
   <div class="grid g2" id="grid"></div>
-  <div class="empty" id="empty" style="display:none;">لا توجد أعمال بعد. ابدأ من <a href="/studio" style="color:var(--c1)">الاستوديو</a>.</div>
+  <div class="empty" id="empty" style="display:none">
+    <span class="sym">✦</span>
+    لا توجد أعمال بعد. ابدأ من <a href="/studio" style="color:var(--teal)">الاستوديو</a>.
+  </div>
 </div>
 <script>
 (async()=>{
@@ -27,9 +116,7 @@
   if(!d.works||!d.works.length){document.getElementById('empty').style.display='block';return;}
   d.works.forEach(w=>{
     const a=document.createElement('a');
-    a.href='/work/'+w.id;
-    a.style.textDecoration='none'; a.style.color='inherit';
-    a.className='cardwork';
+    a.href='/work/'+w.id;a.className='cardwork';
     a.innerHTML='<div class="kind">'+w.kind+'</div>'
       +'<h4>'+w.title+'</h4>'
       +'<div class="muted" style="font-size:12px">'+(w.created_at||'').split('T')[0]+'</div>';

@@ -4,54 +4,139 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>AL-KHALLAQI — الواجهة الإبداعية</title>
-<link rel="manifest" href="/static/manifest.json">
-<link rel="stylesheet" href="/static/css/main.css">
-<style>
-.wrap{max-width:900px;margin:0 auto;padding:20px;}
-.toolbar{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none;}
-.toolbar::-webkit-scrollbar{display:none;}
-.tool{padding:9px 16px;border-radius:12px;border:1px solid var(--border);
-      background:rgba(11,8,32,0.5);color:var(--muted);cursor:pointer;
-      white-space:nowrap;font-weight:600;font-size:14px;transition:.2s;}
-.tool.active,.tool:hover{background:linear-gradient(135deg,var(--p3),var(--c3));
-                          color:#fff;border-color:transparent;}
-.chat{display:flex;flex-direction:column;gap:14px;margin:18px 0;min-height:50vh;}
-.msg{padding:14px 18px;border-radius:18px;max-width:85%;line-height:1.7;
-     animation:rise .35s cubic-bezier(.2,.8,.2,1);word-wrap:break-word;}
+<style>*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e1a;--bg2:#131a2c;
+  --card:rgba(20,30,50,0.65);
+  --border:rgba(125,211,252,0.22);
+  --primary:#7dd3fc;--primary2:#38bdf8;
+  --teal:#5eead4;--gold:#fcd34d;
+  --rose:#fda4af;--lavender:#a5b4fc;
+  --text:#e2e8f0;--muted:#94a3b8;
+}
+html,body{height:100%}
+body{
+  font-family:'Poppins','Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);overflow-x:hidden;
+  min-height:100vh;position:relative;line-height:1.6;
+}
+body::before{
+  content:"";position:fixed;inset:-20%;z-index:-2;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(125,211,252,0.18),transparent 45%),
+    radial-gradient(circle at 85% 30%,rgba(94,234,212,0.14),transparent 45%),
+    radial-gradient(circle at 50% 85%,rgba(165,180,252,0.15),transparent 50%);
+  filter:blur(70px);animation:aurora 22s ease-in-out infinite alternate;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(rgba(125,211,252,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(125,211,252,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(circle at center,black,transparent 85%);
+}
+@keyframes aurora{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(2%,-1.5%) scale(1.06)}
+  100%{transform:translate(-1.5%,1.5%) scale(1.02)}
+}
+.glass{
+  background:var(--card);
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  border:1px solid var(--border);border-radius:20px;
+  box-shadow:0 8px 40px rgba(10,14,26,0.5),inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:14px;border:1px solid var(--border);
+  background:linear-gradient(135deg,var(--primary2),var(--teal));
+  color:#0a0e1a;font-weight:700;cursor:pointer;font-family:inherit;font-size:15px;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s;
+  box-shadow:0 4px 22px rgba(56,189,248,0.3);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(56,189,248,0.5)}
+.input,textarea,select{
+  width:100%;padding:12px 14px;border-radius:12px;
+  background:rgba(10,14,26,0.7);border:1px solid var(--border);
+  color:var(--text);font-family:inherit;font-size:15px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.input:focus,textarea:focus,select:focus{
+  border-color:var(--primary);box-shadow:0 0 0 3px rgba(125,211,252,0.15);
+}
+.topbar{
+  position:sticky;top:0;z-index:20;padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,14,26,0.75);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.brand{
+  font-weight:800;font-size:20px;letter-spacing:2px;
+  color:var(--primary);
+}
+.brand .sym{color:var(--teal);margin:0 6px}
+.muted{color:var(--muted)}
+.chip{
+  display:inline-block;padding:5px 12px;border-radius:999px;
+  background:rgba(125,211,252,0.1);border:1px solid var(--border);
+  color:var(--muted);font-size:12px;letter-spacing:.5px;
+}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.sym{color:var(--teal)}
+
+.wrap{max-width:900px;margin:0 auto;padding:20px}
+.toolbar{display:flex;gap:8px;overflow-x:auto;padding:14px 0;scrollbar-width:none}
+.toolbar::-webkit-scrollbar{display:none}
+.tool{padding:10px 18px;border-radius:12px;border:1px solid var(--border);
+  background:rgba(10,14,26,0.5);color:var(--muted);cursor:pointer;
+  white-space:nowrap;font-weight:600;font-size:14px;transition:.25s;
+  font-family:inherit}
+.tool:hover,.tool.active{background:linear-gradient(135deg,var(--primary2),var(--teal));
+  color:#0a0e1a;border-color:transparent}
+.chat{display:flex;flex-direction:column;gap:16px;margin:20px 0;min-height:50vh}
+.msg{padding:16px 20px;border-radius:18px;max-width:85%;line-height:1.7;
+  animation:rise .35s cubic-bezier(.2,.8,.2,1);word-wrap:break-word}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.msg.user{align-self:flex-start;background:linear-gradient(135deg,var(--p3),var(--c3));
-          color:#fff;box-shadow:0 6px 24px rgba(168,85,247,0.35);}
-.msg.bot{align-self:flex-end;background:rgba(30,27,75,0.6);border:1px solid var(--border);
-         backdrop-filter:blur(14px);}
-.msg img,.msg svg{max-width:100%;border-radius:14px;margin-top:8px;display:block;}
-.composer{position:sticky;bottom:0;padding:14px 0;background:linear-gradient(to top,
-  rgba(5,3,15,0.95),transparent);}
-.composer-inner{display:flex;gap:10px;align-items:flex-end;}
-textarea#inp{resize:none;min-height:52px;max-height:200px;line-height:1.5;}
-.send{width:52px;height:52px;border-radius:50%;padding:0;font-size:22px;}
+.msg.user{align-self:flex-start;
+  background:linear-gradient(135deg,var(--primary2),var(--teal));
+  color:#0a0e1a;font-weight:600}
+.msg.bot{align-self:flex-end;background:var(--card);border:1px solid var(--border);
+  backdrop-filter:blur(14px)}
+.msg img,.msg svg{max-width:100%;border-radius:14px;margin-top:10px;display:block}
+.composer{position:sticky;bottom:0;padding:16px 0;
+  background:linear-gradient(to top,rgba(10,14,26,0.98),transparent)}
+.composer-inner{display:flex;gap:10px;align-items:flex-end}
+textarea#inp{resize:none;min-height:52px;max-height:200px}
+.send{width:52px;height:52px;border-radius:50%;padding:0;font-size:20px}
 </style>
 </head>
 <body>
 <div class="topbar">
-  <span class="brand">AL-KHALLAQI</span>
+  <span class="brand">AL<span class="sym">✦</span>KHALLAQI</span>
   <span class="chip">وضع إبداعي</span>
 </div>
 <div class="wrap">
   <div class="toolbar" id="tools">
-    <div class="tool active" data-t="image">🖼️ صور</div>
-    <div class="tool" data-t="video">🎬 فيديو</div>
-    <div class="tool" data-t="text">✍️ نصوص</div>
-    <div class="tool" data-t="logo">🎯 شعار</div>
-    <div class="tool" data-t="identity">🌈 هوية</div>
-    <div class="tool" data-t="agent">🧠 وكيل</div>
+    <button class="tool active" data-t="image">✦ صور</button>
+    <button class="tool" data-t="video">◆ فيديو</button>
+    <button class="tool" data-t="text">❖ نصوص</button>
+    <button class="tool" data-t="logo">⬢ شعار</button>
+    <button class="tool" data-t="identity">◈ هوية</button>
+    <button class="tool" data-t="agent">✧ وكيل</button>
   </div>
   <div class="chat" id="chat">
-    <div class="msg bot">أهلاً بك في <b>AL-KHALLAQI</b> ✨<br>اختر أداة وابدأ الإبداع. اكتب فكرتك وسأحوّلها إلى واقع.</div>
+    <div class="msg bot">أهلاً بك في <b style="color:var(--primary)">AL-KHALLAQI</b>
+    <br>اختر أداة وابدأ الإبداع. اكتب فكرتك وسأحوّلها إلى واقع.</div>
   </div>
   <div class="composer">
     <div class="composer-inner">
-      <textarea id="inp" placeholder="اكتب فكرتك... مثلاً: هوية بصرية لمقهى عربي مستقبلي"></textarea>
-      <button class="btn send" id="send">➤</button>
+      <textarea id="inp" placeholder="اكتب فكرتك..."></textarea>
+      <button class="btn send" id="send">▸</button>
     </div>
   </div>
 </div>
@@ -60,90 +145,73 @@ const chat=document.getElementById('chat');
 const inp=document.getElementById('inp');
 const send=document.getElementById('send');
 let currentTool='image';
-
 document.querySelectorAll('.tool').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.tool').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    currentTool=t.dataset.t;
-    inp.placeholder={
-      image:'صف الصورة التي تريدها...',
-      video:'صف الفيديو القصير...',
-      text:'اكتب موضوع المقال أو القصة...',
-      logo:'اسم العلامة التجارية...',
-      identity:'اسم المشروع والمجال...',
-      agent:'اكتب هدفاً كاملاً وسيخططه الوكيل...'
-    }[currentTool]||'اكتب...';
+    t.classList.add('active');currentTool=t.dataset.t;
+    inp.placeholder={image:'صف الصورة...',video:'صف الفيديو...',
+      text:'موضوع المقال أو القصة...',logo:'اسم العلامة...',
+      identity:'اسم المشروع والمجال...',agent:'اكتب هدفاً كاملاً...'}[currentTool]||'اكتب...';
   });
 });
-
 function addMsg(cls,html){
   const d=document.createElement('div');
-  d.className='msg '+cls;
-  d.innerHTML=html;
-  chat.appendChild(d);
-  chat.scrollTop=chat.scrollHeight;
-  return d;
+  d.className='msg '+cls;d.innerHTML=html;
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;
 }
-
-inp.addEventListener('input',()=>{
-  inp.style.height='auto';
-  inp.style.height=Math.min(inp.scrollHeight,200)+'px';
-});
+inp.addEventListener('input',()=>{inp.style.height='auto';
+  inp.style.height=Math.min(inp.scrollHeight,200)+'px';});
 inp.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();doSend();}
 });
-
 async function api(path,body){
   const r=await fetch('/api/v1'+path,{method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(body)});
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok) throw new Error(await r.text());
   return r.json();
 }
-
 async function doSend(){
-  const v=inp.value.trim();
-  if(!v) return;
-  inp.value=''; inp.style.height='52px';
-  addMsg('user', v);
-  const bot=addMsg('bot','<span class="pulse">⏳ يفكر...</span>');
+  const v=inp.value.trim();if(!v) return;
+  inp.value='';inp.style.height='52px';
+  addMsg('user',v);
+  const bot=addMsg('bot','<span class="pulse">جارٍ المعالجة...</span>');
   try{
     if(currentTool==='image'){
       const d=await api('/creative/image',{prompt:v});
-      bot.innerHTML='<b>🖼️ صورة مولّدة</b><br><span class="muted">'+d.prompt+'</span>'
-        +'<img src="'+d.url+'" alt=""/>';
+      bot.innerHTML='<b style="color:var(--primary)">✦ صورة مولّدة</b><br>'
+        +'<span class="muted">'+d.prompt+'</span><img src="'+d.url+'"/>';
     } else if(currentTool==='video'){
       const d=await api('/creative/video',{prompt:v});
-      bot.innerHTML='<b>🎬 فيديو قصير</b>';
+      bot.innerHTML='<b style="color:var(--primary)">◆ فيديو قصير</b>';
       if(d.gif){const img=document.createElement('img');img.src=d.gif;bot.appendChild(img);}
       else bot.innerHTML+='<br>'+d.frames.map(u=>'<img src="'+u+'"/>').join('');
     } else if(currentTool==='text'){
       const d=await api('/creative/text',{prompt:v,kind:'article'});
-      bot.innerHTML='<b>✍️ نص مولّد</b><br>'+d.text.replace(/\n/g,'<br>');
+      bot.innerHTML='<b style="color:var(--primary)">❖ نص مولّد</b><br>'
+        +d.text.replace(/\n/g,'<br>');
     } else if(currentTool==='logo'){
       const d=await api('/studio/logo',{brand:v});
-      bot.innerHTML='<b>🎯 شعار</b><br>'+d.svg;
+      bot.innerHTML='<b style="color:var(--primary)">⬢ شعار</b><br>'+d.svg;
     } else if(currentTool==='identity'){
       const d=await api('/studio/identity',{brand:v});
-      const pal=(d.palette||[]).map(c=>'<span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:'+c+';margin:2px;"></span>').join('');
-      bot.innerHTML='<b>🌈 هوية بصرية</b><br>'
+      const pal=(d.palette||[]).map(c=>'<span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:'+c+';margin:2px"></span>').join('');
+      bot.innerHTML='<b style="color:var(--primary)">◈ هوية بصرية</b><br>'
         +'<b>'+d.brand+'</b><br><i>'+(d.tagline||'')+'</i><br>'+pal
         +'<br>'+(d.logo_svg||'');
     } else if(currentTool==='agent'){
       const d=await api('/agent/run',{goal:v,max_steps:6});
-      let html='<b>🧠 نتيجة الوكيل</b><br>';
+      let html='<b style="color:var(--primary)">✧ نتيجة الوكيل</b><br>';
       (d.steps||[]).forEach(s=>{
-        html+='<div style="margin:8px 0;padding:8px;border-left:3px solid var(--p1);background:rgba(168,85,247,0.08);border-radius:8px;">'
-          +'<b>خطوة '+s.step+'</b> — <span class="muted">'+s.action+'</span><br>'
+        html+='<div style="margin:8px 0;padding:10px;border-right:3px solid var(--teal);'
+          +'background:rgba(94,234,212,0.06);border-radius:8px">'
+          +'<b>خطوة '+s.step+'</b> <span class="muted">'+s.action+'</span><br>'
           +'<span>'+s.thought+'</span></div>';
       });
-      html+='<hr style="border-color:var(--border);margin:10px 0"><b>الإجابة:</b><br>'+d.final_answer;
+      html+='<hr style="border-color:var(--border);margin:12px 0"><b>الإجابة:</b><br>'
+        +d.final_answer;
       bot.innerHTML=html;
     }
-  }catch(e){
-    bot.innerHTML='<b style="color:#f87171">خطأ</b><br>'+e.message;
-  }
+  }catch(e){bot.innerHTML='<b style="color:#f87171">خطأ</b><br>'+e.message;}
   chat.scrollTop=chat.scrollHeight;
 }
 send.addEventListener('click',doSend);
