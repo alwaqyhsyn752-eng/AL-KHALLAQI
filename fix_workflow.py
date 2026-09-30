@@ -1,4 +1,11 @@
-name: Build AL-KHALLAQI APK
+#!/usr/bin/env python3
+from pathlib import Path
+
+BASE = Path(__file__).resolve().parent
+wf_dir = BASE / ".github" / "workflows"
+wf_dir.mkdir(parents=True, exist_ok=True)
+
+WORKFLOW = '''name: Build AL-KHALLAQI APK
 
 on:
   workflow_dispatch:
@@ -60,7 +67,7 @@ jobs:
         run: |
           VERSION="${{ github.event.inputs.version }}"
           VERSION="${VERSION:-1.0.0}"
-          sed -i "s/versionName \".*\"/versionName \"$VERSION\"/" app/build.gradle || true
+          sed -i "s/versionName \\".*\\"/versionName \\"$VERSION\\"/" app/build.gradle || true
           echo "Building version $VERSION"
 
       - name: Build Debug APK
@@ -86,3 +93,15 @@ jobs:
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+'''
+
+(wf_dir / "build-apk.yml").write_text(WORKFLOW, encoding="utf-8")
+print("[+] .github/workflows/build-apk.yml (fixed)")
+print()
+print("التغيير الأساسي: استبدلت android-actions/setup-android")
+print("بأوامر مباشرة (sdkmanager) تتجنب حزمة 'tools' المحذوفة.")
+print()
+print("ارفع الآن:")
+print("  git add -A")
+print("  git commit -m 'Fix APK workflow: remove deprecated tools package'")
+print("  git push origin main")
